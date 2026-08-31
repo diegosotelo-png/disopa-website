@@ -1143,12 +1143,13 @@ section{padding:110px 0;position:relative}
         <input type="hidden" name="_subject" value="Nueva solicitud desde disopa.pe">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_blacklist" value="viagra,casino,bitcoin,crypto,seo service,loan offer,porn">
         <input type="hidden" name="_autoresponse" value="Hola, recibimos su solicitud en DISOPA. Un ingeniero la revisará y le responderemos a la brevedad con una evaluación preliminar. — DISOPA, Perforación e Inspección de Pozos de Agua · +51 903 522 281">
         <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="form-grid-2">
           <div class="form-row">
             <label for="cf-name">Nombre</label>
-            <input type="text" id="cf-name" name="name" placeholder="Nombre completo" autocomplete="name" required>
+            <input type="text" id="cf-name" name="Nombre" placeholder="Nombre completo" autocomplete="name" required>
           </div>
           <div class="form-row">
             <label for="cf-email">Correo electrónico</label>
@@ -1158,7 +1159,7 @@ section{padding:110px 0;position:relative}
         <div class="form-grid-2">
           <div class="form-row">
             <label for="cf-reason">Servicio</label>
-            <select id="cf-reason" name="reason" required>
+            <select id="cf-reason" name="Servicio solicitado" required>
               <option value="" disabled selected>Seleccione</option>
               <optgroup label="Inspección y diagnóstico">
                 <option>Video-inspección CCTV</option>
@@ -1181,12 +1182,12 @@ section{padding:110px 0;position:relative}
           </div>
           <div class="form-row">
             <label for="cf-zone">Ubicación del pozo</label>
-            <input type="text" id="cf-zone" name="zone" placeholder="Distrito y región" autocomplete="address-level2">
+            <input type="text" id="cf-zone" name="Ubicación del pozo" placeholder="Distrito y región" autocomplete="address-level2">
           </div>
         </div>
         <div class="form-row">
           <label for="cf-message">Detalle (opcional)</label>
-          <textarea id="cf-message" name="message" placeholder="Profundidad aproximada, antigüedad del pozo, caudal actual, qué problema observa…"></textarea>
+          <textarea id="cf-message" name="Detalle del caso" placeholder="Profundidad aproximada, antigüedad del pozo, caudal actual, qué problema observa…"></textarea>
         </div>
         <button type="submit" class="btn btn-primary btn-block" id="cfSubmit"><i class="fas fa-paper-plane"></i> Enviar solicitud</button>
         <p class="form-status" id="formStatus" role="status" aria-live="polite" hidden></p>
@@ -1747,10 +1748,13 @@ contactForm.addEventListener('submit',e=>{
   cfSubmit.disabled=true;
   cfSubmit.textContent='Enviando…';
   formStatus.hidden=true;
+  const fd=new FormData(contactForm);
+  /* asunto informativo: quién escribe y qué necesita, visible sin abrir el correo */
+  fd.set('_subject','Solicitud web · '+(fd.get('Nombre')||'Cliente')+' — '+(fd.get('Servicio solicitado')||'Consulta'));
   fetch('https://formsubmit.co/ajax/1475f99a6eae50d62cf48cd2f7f05d03',{
     method:'POST',
     headers:{'Accept':'application/json'},
-    body:new FormData(contactForm)
+    body:fd
   })
   .then(r=>{if(!r.ok)throw new Error();return r.json()})
   .then(()=>{
