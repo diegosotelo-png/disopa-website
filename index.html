@@ -473,6 +473,39 @@ section{padding:110px 0;position:relative}
 .form-status{margin-top:4px;padding:13px 16px;border-radius:var(--radius-sm);font-size:.9rem;line-height:1.65}
 .form-status.ok{background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.35);color:#8fe6ae}
 .form-status.err{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.35);color:#ffa3a3}
+/* ── Asistente en dos pasos ── */
+.form-steps{display:flex;flex-direction:column;gap:9px;margin-bottom:4px}
+.fs-bar{height:3px;background:var(--depth);border-radius:99px;overflow:hidden}
+.fs-bar span{display:block;height:100%;width:50%;background:var(--amber);border-radius:99px;transition:width .45s var(--ease-out)}
+.fs-label{font-size:.65rem;color:var(--ink-4);letter-spacing:1.6px;text-transform:uppercase}
+.form-step{display:flex;flex-direction:column;gap:16px}
+.form-step[hidden]{display:none}
+.form-step.slide-in{animation:stepIn .38s var(--ease-soft)}
+.form-step.slide-back{animation:stepBack .38s var(--ease-soft)}
+@keyframes stepIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+@keyframes stepBack{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:none}}
+.form-label-txt{font-family:var(--font-mono);font-size:.65rem;color:var(--ink-4);text-transform:uppercase;letter-spacing:1.5px}
+/* chips de urgencia */
+.chip-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:flex;align-items:center;justify-content:center;gap:9px;padding:13px 10px;border:1px solid var(--border-soft);border-radius:var(--radius-sm);background:var(--depth);font-size:.85rem;color:var(--ink-3);cursor:pointer;transition:border-color .25s,background .25s,color .25s;text-align:center;line-height:1.3}
+.chip span i{font-size:.8rem;color:var(--ink-4);transition:color .25s}
+.chip:hover span{border-color:var(--border-strong)}
+.chip input:checked+span{border-color:var(--amber);background:rgba(245,166,35,.08);color:var(--ink-1)}
+.chip input:checked+span i{color:var(--amber)}
+.chip input:focus-visible+span{outline:2px solid var(--amber);outline-offset:3px}
+/* resumen del caso en el paso 2 */
+.fs-summary{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-3);background:var(--depth);border:1px solid var(--border-soft);border-left:2px solid var(--amber);padding:11px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.65}
+.fs-summary strong{color:var(--ink-1);font-weight:600}
+.fs-back{background:none;border:none;color:var(--ink-3);font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:9px;align-self:center;transition:color .25s;display:inline-flex;align-items:center;gap:8px}
+.fs-back:hover{color:var(--ink-1)}
+.fs-back i{font-size:.65rem}
+/* validación en vivo */
+.field-error{display:none;font-size:.76rem;color:#ffa3a3;line-height:1.4}
+.form-row.invalid input{border-color:rgba(255,107,107,.55)}
+.form-row.invalid .field-error{display:block}
+@media(max-width:420px){.chip-group{grid-template-columns:1fr}}
 
 /* ===== FOOTER ===== */
 .footer{background:var(--depth-2);border-top:1px solid var(--border-soft)}
@@ -1138,29 +1171,24 @@ section{padding:110px 0;position:relative}
     </div>
     <div class="contact-form-card" data-reveal="right">
       <h3>Cuéntenos su caso</h3>
-      <p>Complete sus datos y su solicitud llegará directo a nuestro correo. Le respondemos con una evaluación preliminar.</p>
+      <p>Dos pasos rápidos: cuéntenos qué pasa con su pozo y déjenos su correo. Le respondemos con una evaluación preliminar.</p>
       <form class="contact-form" id="contactForm" action="https://formsubmit.co/1475f99a6eae50d62cf48cd2f7f05d03" method="POST" novalidate>
         <input type="hidden" name="_subject" value="Nueva solicitud desde disopa.pe">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_blacklist" value="viagra,casino,bitcoin,crypto,seo service,loan offer,porn">
-        <input type="hidden" name="_autoresponse" value="Hola, recibimos su solicitud en DISOPA. Un ingeniero la revisará y le responderemos a la brevedad con una evaluación preliminar. — DISOPA, Perforación e Inspección de Pozos de Agua · +51 903 522 281">
         <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <div class="form-grid-2">
-          <div class="form-row">
-            <label for="cf-name">Nombre</label>
-            <input type="text" id="cf-name" name="Nombre" placeholder="Nombre completo" autocomplete="name" required>
-          </div>
-          <div class="form-row">
-            <label for="cf-email">Correo electrónico</label>
-            <input type="email" id="cf-email" name="email" placeholder="su-correo@ejemplo.com" autocomplete="email" required>
-          </div>
+
+        <div class="form-steps">
+          <div class="fs-bar" aria-hidden="true"><span id="fsFill"></span></div>
+          <span class="fs-label mono" id="fsLabel">Paso 1 de 2 — Su caso</span>
         </div>
-        <div class="form-grid-2">
+
+        <div class="form-step" id="fsStep1">
           <div class="form-row">
-            <label for="cf-reason">Servicio</label>
+            <label for="cf-reason">¿Qué necesita?</label>
             <select id="cf-reason" name="Servicio solicitado" required>
-              <option value="" disabled selected>Seleccione</option>
+              <option value="" disabled selected>Seleccione un servicio</option>
               <optgroup label="Inspección y diagnóstico">
                 <option>Video-inspección CCTV</option>
                 <option>Diagnóstico de fallas</option>
@@ -1181,18 +1209,41 @@ section{padding:110px 0;position:relative}
             </select>
           </div>
           <div class="form-row">
+            <span class="form-label-txt">Urgencia</span>
+            <div class="chip-group" role="radiogroup" aria-label="Nivel de urgencia">
+              <label class="chip"><input type="radio" name="Urgencia" value="Consulta normal" checked><span><i class="fas fa-calendar-check" aria-hidden="true"></i> Consulta normal</span></label>
+              <label class="chip"><input type="radio" name="Urgencia" value="URGENTE — pozo detenido"><span><i class="fas fa-bolt" aria-hidden="true"></i> Urgente — pozo detenido</span></label>
+            </div>
+          </div>
+          <div class="form-row">
             <label for="cf-zone">Ubicación del pozo</label>
             <input type="text" id="cf-zone" name="Ubicación del pozo" placeholder="Distrito y región" autocomplete="address-level2">
           </div>
+          <div class="form-row">
+            <label for="cf-message">Detalle (opcional)</label>
+            <textarea id="cf-message" name="Detalle del caso" placeholder="Profundidad aproximada, antigüedad del pozo, caudal actual, qué problema observa…"></textarea>
+          </div>
+          <button type="button" class="btn btn-primary btn-block" id="fsNext">Continuar <i class="fas fa-arrow-right"></i></button>
         </div>
-        <div class="form-row">
-          <label for="cf-message">Detalle (opcional)</label>
-          <textarea id="cf-message" name="Detalle del caso" placeholder="Profundidad aproximada, antigüedad del pozo, caudal actual, qué problema observa…"></textarea>
+
+        <div class="form-step" id="fsStep2" hidden>
+          <p class="fs-summary" id="fsSummary"></p>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label for="cf-name">Nombre</label>
+              <input type="text" id="cf-name" name="Nombre" placeholder="Nombre completo" autocomplete="name" required>
+            </div>
+            <div class="form-row">
+              <label for="cf-email">Correo electrónico</label>
+              <input type="email" id="cf-email" name="email" placeholder="su-correo@ejemplo.com" autocomplete="email" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="cfSubmit"><i class="fas fa-paper-plane"></i> Enviar solicitud</button>
+          <button type="button" class="fs-back" id="fsBack"><i class="fas fa-arrow-left" aria-hidden="true"></i> Volver al paso anterior</button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite" hidden></p>
         </div>
-        <button type="submit" class="btn btn-primary btn-block" id="cfSubmit"><i class="fas fa-paper-plane"></i> Enviar solicitud</button>
-        <p class="form-status" id="formStatus" role="status" aria-live="polite" hidden></p>
       </form>
-      <p class="form-note"><i class="fas fa-lock"></i> Su solicitud se envía de forma segura a nuestro correo. No compartimos sus datos con terceros.</p>
+      <p class="form-note"><i class="fas fa-lock"></i> Le respondemos en menos de 24 horas hábiles. Sus datos solo se usan para atender su solicitud.</p>
     </div>
   </div>
 </div>
@@ -1732,11 +1783,56 @@ if(!reduce&&window.matchMedia('(hover:hover)').matches){
   });
 }
 
-/* ===== FORMULARIO → CORREO (FormSubmit) ===== */
+/* ===== FORMULARIO EN DOS PASOS → CORREO (FormSubmit) ===== */
 const contactForm=document.getElementById('contactForm');
 const formStatus=document.getElementById('formStatus');
 const cfSubmit=document.getElementById('cfSubmit');
 const CF_BTN=cfSubmit.innerHTML;
+const fsStep1=document.getElementById('fsStep1');
+const fsStep2=document.getElementById('fsStep2');
+const fsFill=document.getElementById('fsFill');
+const fsLabel=document.getElementById('fsLabel');
+const fsSummary=document.getElementById('fsSummary');
+const cfReason=document.getElementById('cf-reason');
+
+function goStep(n,back){
+  const mostrar=n===1?fsStep1:fsStep2;
+  const ocultar=n===1?fsStep2:fsStep1;
+  ocultar.hidden=true;
+  mostrar.hidden=false;
+  if(!reduce){
+    mostrar.classList.remove('slide-in','slide-back');
+    void mostrar.offsetWidth;
+    mostrar.classList.add(back?'slide-back':'slide-in');
+  }
+  fsFill.style.width=n===1?'50%':'100%';
+  fsLabel.textContent=n===1?'Paso 1 de 2 — Su caso':'Paso 2 de 2 — Sus datos';
+  if(n===2){
+    const urg=contactForm.querySelector('input[name="Urgencia"]:checked');
+    fsSummary.textContent='';
+    fsSummary.append('Está solicitando: ');
+    const b=document.createElement('strong');b.textContent=cfReason.value;
+    fsSummary.append(b,' · '+(urg?urg.value:'Consulta normal'));
+  }
+}
+document.getElementById('fsNext').addEventListener('click',()=>{
+  if(!cfReason.reportValidity())return;
+  goStep(2);
+  document.getElementById('cf-name').focus({preventScroll:true});
+});
+document.getElementById('fsBack').addEventListener('click',()=>goStep(1,true));
+
+/* validación en vivo de nombre y correo */
+[['cf-name','Ingrese su nombre.'],['cf-email','Ingrese un correo válido (ej. nombre@dominio.com).']].forEach(par=>{
+  const el=document.getElementById(par[0]);
+  const fila=el.closest('.form-row');
+  const err=document.createElement('p');
+  err.className='field-error';err.textContent=par[1];
+  fila.appendChild(err);
+  el.addEventListener('blur',()=>{if(el.value)fila.classList.toggle('invalid',!el.checkValidity())});
+  el.addEventListener('input',()=>{if(el.checkValidity())fila.classList.remove('invalid')});
+});
+
 function cfShow(kind,msg){
   formStatus.className='form-status '+kind;
   formStatus.textContent=msg;
@@ -1744,13 +1840,16 @@ function cfShow(kind,msg){
 }
 contactForm.addEventListener('submit',e=>{
   e.preventDefault();
+  /* si el paso 1 quedó inválido, volver a él en lugar de fallar en silencio */
+  if(!cfReason.checkValidity()){goStep(1,true);setTimeout(()=>cfReason.reportValidity(),reduce?0:400);return}
   if(!contactForm.reportValidity())return;
   cfSubmit.disabled=true;
   cfSubmit.textContent='Enviando…';
   formStatus.hidden=true;
   const fd=new FormData(contactForm);
-  /* asunto informativo: quién escribe y qué necesita, visible sin abrir el correo */
-  fd.set('_subject','Solicitud web · '+(fd.get('Nombre')||'Cliente')+' — '+(fd.get('Servicio solicitado')||'Consulta'));
+  /* asunto con prioridad: lo urgente se distingue en la bandeja sin abrir el correo */
+  const urgente=(fd.get('Urgencia')||'').indexOf('URGENTE')>-1;
+  fd.set('_subject',(urgente?'🔴 URGENTE · ':'Solicitud web · ')+(fd.get('Nombre')||'Cliente')+' — '+(fd.get('Servicio solicitado')||'Consulta'));
   fetch('https://formsubmit.co/ajax/1475f99a6eae50d62cf48cd2f7f05d03',{
     method:'POST',
     headers:{'Accept':'application/json'},
@@ -1759,7 +1858,8 @@ contactForm.addEventListener('submit',e=>{
   .then(r=>{if(!r.ok)throw new Error();return r.json()})
   .then(()=>{
     contactForm.reset();
-    cfShow('ok','✓ Su solicitud fue enviada correctamente. Le responderemos a la brevedad.');
+    fsSummary.textContent='';
+    cfShow('ok','✓ Su solicitud fue enviada correctamente. Le responderemos en menos de 24 horas hábiles.');
   })
   .catch(()=>{
     cfShow('err','No se pudo enviar en este momento. Escríbanos a disopa.pe@gmail.com o llámenos al +51 903 522 281.');
