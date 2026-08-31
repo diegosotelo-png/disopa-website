@@ -1856,7 +1856,9 @@ contactForm.addEventListener('submit',e=>{
     body:fd
   })
   .then(r=>{if(!r.ok)throw new Error();return r.json()})
-  .then(()=>{
+  .then(d=>{
+    /* FormSubmit responde 200 incluso al rechazar (lista negra, honeypot): el éxito real viene en el cuerpo */
+    if(String(d.success)!=='true')throw new Error();
     contactForm.reset();
     fsSummary.textContent='';
     cfShow('ok','✓ Su solicitud fue enviada correctamente. Le responderemos en menos de 24 horas hábiles.');
