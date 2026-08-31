@@ -343,17 +343,6 @@ section{padding:110px 0;position:relative}
 .why-card h3{font-size:1.02rem;font-weight:700;margin-bottom:9px;color:var(--ink-1);min-height:2.5em;display:flex;align-items:center;justify-content:center;text-wrap:balance}
 .why-card p{font-size:.85rem;color:var(--ink-3);line-height:1.72}
 
-/* ===== NORMATIVA / CUMPLIMIENTO ===== */
-.compliance{background:var(--depth-2);position:relative;overflow:hidden}
-.compliance::before{content:'';position:absolute;top:-30%;right:-10%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.07),transparent 70%);pointer-events:none}
-.compliance-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:60px;align-items:center;position:relative;z-index:1}
-.compliance-list{display:grid;gap:12px}
-.compliance-item{display:flex;gap:16px;padding:19px 20px;background:var(--depth-3);border:1px solid var(--border-soft);border-radius:var(--radius);transition:border-color .35s,transform .35s var(--ease-out),background .35s}
-.compliance-item:hover{border-color:rgba(79,179,201,.35);transform:translateX(6px);background:var(--depth-4)}
-.compliance-item i{color:var(--amber);font-size:1.05rem;margin-top:3px;flex:0 0 auto;width:20px}
-.compliance-item .t{font-weight:700;font-size:.94rem;margin-bottom:4px;color:var(--ink-1)}
-.compliance-item .d{font-size:.83rem;color:var(--ink-3);line-height:1.65}
-.compliance-item .d code{font-family:var(--font-mono);font-size:.78rem;color:var(--ink-2);background:rgba(245,166,35,.1);padding:1px 6px;border-radius:4px}
 
 /* ===== TESTIMONIOS ===== */
 .testimonials{background:var(--depth)}
@@ -402,10 +391,6 @@ section{padding:110px 0;position:relative}
   filter:brightness(0) invert(1) opacity(.62);
   transition:filter .4s var(--ease-out)}
 .brand:hover .brand-logo{filter:none}
-.partners-note{display:flex;align-items:flex-start;gap:14px;max-width:74ch;margin:40px auto 0;padding:18px 22px;background:var(--depth-3);border:1px solid var(--border-soft);border-radius:var(--radius)}
-.partners-note i{color:var(--amber);font-size:.95rem;margin-top:4px;flex:0 0 auto}
-.partners-note p{font-size:.87rem;color:var(--ink-3);line-height:1.72}
-.partners-note strong{color:var(--ink-1);font-weight:600}
 @media(max-width:640px){.brand{width:142px;height:74px;padding:12px 14px;margin:0 5px}.brand-logo{max-height:42px}}
 
 /* rejilla original, ya sin uso directo */
@@ -638,9 +623,6 @@ section{padding:110px 0;position:relative}
 .logo:hover .logo-mark i{animation:markSpin .7s var(--ease-out)}
 @keyframes markSpin{to{transform:rotate(360deg)}}
 
-/* ── Iconos de normativa con rebote ── */
-.compliance-item:hover i{animation:nudge .45s var(--ease-out)}
-@keyframes nudge{50%{transform:translateY(-4px)}}
 
 /* ── Anillo de progreso en el botón "volver arriba" ── */
 .to-top svg{position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);transform:rotate(-90deg);pointer-events:none}
@@ -674,7 +656,7 @@ section{padding:110px 0;position:relative}
 /* ===== RESPONSIVE ===== */
 @media(max-width:1080px){
   .about-grid{gap:44px}
-  .compliance-wrap{grid-template-columns:1fr;gap:40px}
+  
   .process-track{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:32px 18px}
   .process-track::before,.process-track::after{display:none}
   .footer-grid{grid-template-columns:1fr 1fr;gap:44px}
@@ -979,32 +961,11 @@ section{padding:110px 0;position:relative}
 </div>
 </section>
 
-<!-- ===== NORMATIVA ===== -->
-<section class="compliance" id="normativa">
-<div class="container">
-  <div class="compliance-wrap">
-    <div data-reveal="left">
-      <div class="section-label"><span class="idx">07</span><span class="lbl">Marco normativo</span><span class="tick"></span></div>
-      <h2 class="section-title">Trabajamos dentro del <span class="aqua">marco legal peruano</span></h2>
-      <p class="section-desc">El agua subterránea es un recurso regulado. Toda perforación, y todo aprovechamiento, requieren autorización de la Autoridad Nacional del Agua. Acompañamos al cliente en ese trámite y entregamos la documentación técnica que lo sustenta.</p>
-      <a href="#contacto" class="btn btn-water" style="margin-top:26px"><i class="fas fa-file-signature"></i> Consultar mi caso</a>
-    </div>
-    <div class="compliance-list" data-stagger>
-      <div class="compliance-item" data-reveal><i class="fas fa-gavel"></i><div><div class="t">Ley de Recursos Hídricos</div><div class="d">El aprovechamiento del agua subterránea se rige por la <code>Ley N° 29338</code> y su reglamento. Ningún pozo puede operar formalmente sin el derecho de uso correspondiente.</div></div></div>
-      <div class="compliance-item" data-reveal><i class="fas fa-stamp"></i><div><div class="t">Autorización de ejecución de obras</div><div class="d">Antes de perforar se tramita ante la <code>ANA</code> la autorización de ejecución de obras de aprovechamiento hídrico, con expediente técnico y estudio hidrogeológico.</div></div></div>
-      <div class="compliance-item" data-reveal><i class="fas fa-id-card"></i><div><div class="t">Licencia de uso de agua</div><div class="d">Concluido el pozo y su prueba de bombeo, corresponde solicitar la licencia de uso según el destino: agrario, poblacional, industrial o minero.</div></div></div>
-      <div class="compliance-item" data-reveal><i class="fas fa-vial"></i><div><div class="t">Estándares de calidad del agua</div><div class="d">Los resultados de laboratorio se contrastan con los <code>ECA</code> para agua vigentes según la categoría de uso, para verificar aptitud antes de la puesta en servicio.</div></div></div>
-      <div class="compliance-item" data-reveal><i class="fas fa-user-shield"></i><div><div class="t">Seguridad y salud en el trabajo</div><div class="d">Cuadrillas con SCTR vigente y procedimientos conforme a la <code>Ley N° 29783</code>, incluyendo trabajo en espacios confinados y maniobras de izaje.</div></div></div>
-    </div>
-  </div>
-</div>
-</section>
-
 <!-- ===== TESTIMONIOS ===== -->
 <section class="testimonials" id="testimonios">
 <div class="container">
   <div class="section-head center" data-reveal>
-    <div class="section-label"><span class="idx">08</span><span class="lbl">Testimonios</span></div>
+    <div class="section-label"><span class="idx">07</span><span class="lbl">Testimonios</span></div>
     <h2 class="section-title">Lo que dicen nuestros <em>clientes</em></h2>
     <p class="section-desc">Nueve casos reales en nueve sectores distintos: lo que cambia cuando se conoce el estado real del pozo.</p>
   </div>
@@ -1090,7 +1051,7 @@ section{padding:110px 0;position:relative}
 <section class="partners" id="aliados">
 <div class="container">
   <div class="section-head center" data-reveal>
-    <div class="section-label"><span class="idx">09</span><span class="lbl">Con quiénes trabajamos</span></div>
+    <div class="section-label"><span class="idx">08</span><span class="lbl">Con quiénes trabajamos</span></div>
     <h2 class="section-title">Entidades y operadores del <em>sector agua</em></h2>
     <p class="section-desc">Nuestro trabajo se cruza a diario con las entidades que regulan, administran y operan el recurso hídrico en el Perú — desde la autoridad que otorga los derechos de uso hasta las EPS y las juntas de saneamiento rural.</p>
   </div>
@@ -1101,10 +1062,6 @@ section{padding:110px 0;position:relative}
     </div>
   </div>
 
-  <div class="partners-note" data-reveal>
-    <i class="fas fa-circle-info"></i>
-    <p>Los trámites de autorización y licencia de uso de agua subterránea se gestionan ante la <strong>Autoridad Nacional del Agua</strong> y sus Autoridades Locales. Acompañamos el expediente técnico en cada caso.</p>
-  </div>
 </div>
 </section>
 
@@ -1112,7 +1069,7 @@ section{padding:110px 0;position:relative}
 <section class="faq" id="faq">
 <div class="container-narrow">
   <div class="section-head center" data-reveal>
-    <div class="section-label"><span class="idx">10</span><span class="lbl">Preguntas frecuentes</span></div>
+    <div class="section-label"><span class="idx">09</span><span class="lbl">Preguntas frecuentes</span></div>
     <h2 class="section-title">Lo que más nos consultan</h2>
   </div>
   <div class="faq-list" data-stagger>
@@ -1148,7 +1105,7 @@ section{padding:110px 0;position:relative}
 <section class="contact" id="contacto">
 <div class="container">
   <div class="section-head" data-reveal>
-    <div class="section-label"><span class="idx">11</span><span class="lbl">Contacto</span><span class="tick"></span></div>
+    <div class="section-label"><span class="idx">10</span><span class="lbl">Contacto</span><span class="tick"></span></div>
     <h2 class="section-title">Solicite su inspección o <em>cotice su perforación</em></h2>
     <p class="section-desc">Cuéntenos qué está pasando con su pozo. Le respondemos con una evaluación preliminar y una cotización sin compromiso.</p>
   </div>
@@ -1268,7 +1225,7 @@ section{padding:110px 0;position:relative}
       <li><i class="fas fa-chevron-right"></i><a href="#servicios">Prueba de bombeo y aforo</a></li>
       <li><i class="fas fa-chevron-right"></i><a href="#servicios">Rehabilitación de pozos</a></li>
       <li><i class="fas fa-chevron-right"></i><a href="#servicios">Perforación y habilitación</a></li>
-      <li><i class="fas fa-chevron-right"></i><a href="#normativa">Gestión de permisos ANA</a></li>
+      <li><i class="fas fa-chevron-right"></i><a href="#servicios">Gestión de permisos ANA</a></li>
     </ul>
   </div>
   <div class="footer-col">
