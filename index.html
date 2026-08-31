@@ -820,7 +820,7 @@ section{padding:110px 0;position:relative}
   <div class="about-grid">
     <div class="about-visual" data-reveal="left">
       <div class="about-image">
-        <img class="reveal-img" src="images/nosotros-perforacion.webp" alt="Equipo de DISOPA perforando un pozo de agua con torre rotativa, con el agua brotando del pozo al atardecer" loading="lazy" decoding="async">
+        <img class="reveal-img" src="images/nosotros-perforacion.webp" alt="Equipo de DISOPA perforando un pozo de agua con torre rotativa, con el agua brotando del pozo al atardecer" decoding="async">
       </div>
       <div class="experience-badge"><div class="number">15+</div><div class="text">Años<br>en campo</div></div>
     </div>
@@ -1415,7 +1415,9 @@ const revealEls=document.querySelectorAll('[data-reveal],#processTrack');
 if('IntersectionObserver' in window){
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
-      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+      /* Chrome mide intersección 0 en elementos con clip-path total: el .reveal-img nunca
+         dispararía su propio observador, así que el padre visible le propaga la aparición */
+      if(e.isIntersecting){e.target.classList.add('visible');if(e.target.querySelectorAll)e.target.querySelectorAll('.reveal-img').forEach(r=>r.classList.add('visible'));obs.unobserve(e.target)}
     });
   },{threshold:0.12,rootMargin:'0px 0px -60px 0px'});
   revealEls.forEach(el=>obs.observe(el));
