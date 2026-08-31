@@ -1,0 +1,7 @@
+.DS_Store
+.agents/
+.claude/
+.interface-design/
+skills-lock.json
+_preview.html
+images/logos/_orig/

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /images/logos/_orig/
+
+Sitemap: https://disopa.pe/sitemap.xml
