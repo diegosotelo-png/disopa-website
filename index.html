@@ -285,10 +285,8 @@ section{padding:110px 0;position:relative}
 .gallery{background:var(--depth-2)}
 /* Mosaico: el primer trabajo (video-inspección, la especialidad) manda al doble
    de tamaño; 1 destacado 2×2 + 8 sencillos = 12 celdas exactas en 4 columnas. */
-.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.gallery-grid .gallery-item:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:4/3}
-.gallery-grid .gallery-item:first-child .gallery-caption{font-size:.92rem;bottom:18px;left:19px;right:19px}
-.gallery-grid .gallery-item:first-child .gallery-tag{top:16px;left:16px}
+/* 9 proyectos en retícula 3×3 uniforme: todas las tarjetas pesan lo mismo; el detalle grande vive en el lightbox */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .gallery-item{display:block;width:100%;padding:0;border:none;font:inherit;text-align:left;position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;cursor:pointer;outline:1px solid var(--border-strong);outline-offset:-1px;background:var(--depth-3);transition:outline-color .35s,transform .45s var(--ease-out)}
 .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease-out)}
 .gallery-item::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,11,0.94),rgba(10,10,11,0.2) 58%,transparent 84%);transition:opacity .4s}
@@ -700,6 +698,7 @@ section{padding:110px 0;position:relative}
   .about-grid,.contact-wrapper{grid-template-columns:1fr}
   .experience-badge{left:16px;bottom:16px}
   .gallery-grid{grid-template-columns:1fr 1fr}
+  /* 9 tarjetas en 2 columnas dejarían un hueco: la primera cierra la fila a lo ancho */
   .gallery-grid .gallery-item:first-child{grid-column:span 2;grid-row:auto;aspect-ratio:16/10}
   .lightbox-panel{flex-direction:column;gap:26px}
   .lightbox-close{top:-46px;right:0}
@@ -719,8 +718,6 @@ section{padding:110px 0;position:relative}
   .gallery-grid{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;margin:0 -18px;padding:4px 18px 14px;scrollbar-width:none;-ms-overflow-style:none}
   .gallery-grid::-webkit-scrollbar{display:none}
   .gallery-grid .gallery-item{flex:0 0 84%;scroll-snap-align:center}
-  .gallery-grid .gallery-item:first-child{aspect-ratio:4/3}
-  .gallery-grid .gallery-item:first-child .gallery-caption{font-size:.78rem;bottom:14px;left:15px;right:15px}
   .form-grid-2{grid-template-columns:1fr}
   .contact-form-card{padding:26px 20px}
   .footer-grid{grid-template-columns:1fr;gap:38px}
