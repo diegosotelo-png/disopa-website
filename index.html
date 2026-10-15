@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- Seguridad: CSP restrictiva (solo recursos propios + mapa de Google), sin fuga de referrer -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-src https://www.google.com; connect-src 'self' https://formsubmit.co; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -923,6 +923,28 @@ section.partners{content-visibility:visible}
 .hero h1 .line-accent>span{padding-bottom:.06em}
 @media(max-height:860px){.hero h1{font-size:clamp(2.2rem,4.8vw,3.6rem)}}
 @media(max-width:640px){.hero h1{font-size:clamp(2rem,9.4vw,2.6rem);line-height:1.08}}
+
+
+/* ── iPhone / móviles: zonas seguras (isla, barra de Safari) y visor de fotos usable ── */
+.navbar{padding-top:calc(20px + env(safe-area-inset-top))}
+.navbar.scrolled{padding-top:calc(12px + env(safe-area-inset-top))}
+.to-top{bottom:calc(26px + env(safe-area-inset-bottom))}
+@media(max-width:968px){
+  .lightbox{-webkit-backdrop-filter:none;backdrop-filter:none;background:#0A0A0B;align-items:flex-start;padding:calc(env(safe-area-inset-top) + 70px) 16px 0;height:100vh;height:100dvh;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  .lightbox-shell{margin:0 auto;display:flex;flex-direction:column;min-height:100%}
+  .lightbox-panel{gap:18px}
+  /* X fija arriba a la derecha, siempre por debajo de la isla y fácil de tocar */
+  .lightbox-close{position:fixed;top:calc(env(safe-area-inset-top) + 14px);right:16px;width:48px;height:48px;z-index:2010;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+  .lightbox-frame::before,.lightbox-frame::after{display:none}
+  .lightbox-frame img{max-height:44vh;max-height:44svh;width:100%;object-fit:cover;border-radius:12px}
+  .lightbox-info{min-width:0}
+  .lightbox-info h3{font-size:1.2rem;margin-bottom:8px}
+  .lightbox-info p{font-size:.9rem;line-height:1.65}
+  /* flechas + miniaturas: barra fija abajo, por encima de la barra de Safari */
+  .lightbox-nav{position:sticky;bottom:calc(env(safe-area-inset-bottom) + 70px);z-index:3;justify-content:space-between;margin-top:18px;pointer-events:none}
+  .lightbox-nav button{pointer-events:auto;width:48px;height:48px;background:rgba(27,26,29,.92)}
+  .lightbox-thumbs{position:sticky;bottom:0;z-index:3;margin:auto -16px 0;padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);background:rgba(10,10,11,.94);border-top:1px solid var(--border-soft);justify-content:flex-start}
+}
 
 /* ── Menos movimiento: todo lo de esta capa se queda quieto ── */
 @media(prefers-reduced-motion:reduce){
