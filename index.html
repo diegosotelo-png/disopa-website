@@ -453,6 +453,7 @@ section{padding:110px 0;position:relative}
 .fs-back:hover{color:var(--ink-1)}
 .fs-back i{font-size:.65rem}
 /* validación en vivo */
+.form-row label .opt{font-weight:400;opacity:.6;font-size:.85em}
 .field-error{display:none;font-size:.76rem;color:#ffa3a3;line-height:1.4}
 .form-row.invalid input{border-color:rgba(255,107,107,.55)}
 .form-row.invalid .field-error{display:block}
@@ -1318,6 +1319,7 @@ section.partners{content-visibility:visible}
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_blacklist" value="viagra,casino,bitcoin,crypto,seo service,loan offer,porn">
+        <input type="hidden" name="_autoresponse" value="Hola, gracias por escribir a DISOPA. Recibimos su solicitud y un especialista lo contactará en menos de 24 horas hábiles. Si su pozo está detenido o el caso es urgente, llámenos o escríbanos por WhatsApp al +51 903 522 281. — Equipo DISOPA · Hidrogeología y pozos">
         <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
 
         <div class="form-steps">
@@ -1328,7 +1330,7 @@ section.partners{content-visibility:visible}
         <div class="form-step" id="fsStep1">
           <div class="form-row">
             <label for="cf-reason">¿Qué necesita?</label>
-            <select id="cf-reason" name="Servicio solicitado" required>
+            <select id="cf-reason" name="Servicio" required>
               <option value="" disabled selected>Seleccione un servicio</option>
               <optgroup label="Inspección y diagnóstico">
                 <option>Video-inspección CCTV</option>
@@ -1358,11 +1360,11 @@ section.partners{content-visibility:visible}
           </div>
           <div class="form-row">
             <label for="cf-zone">Ubicación del pozo</label>
-            <input type="text" id="cf-zone" name="Ubicación del pozo" placeholder="Distrito y región" autocomplete="address-level2">
+            <input type="text" id="cf-zone" name="Ubicación" placeholder="Distrito y región" autocomplete="address-level2">
           </div>
           <div class="form-row">
             <label for="cf-message">Detalle (opcional)</label>
-            <textarea id="cf-message" name="Detalle del caso" placeholder="Profundidad aproximada, antigüedad del pozo, caudal actual, qué problema observa…"></textarea>
+            <textarea id="cf-message" name="Detalle" placeholder="Profundidad aproximada, antigüedad del pozo, caudal actual, qué problema observa…"></textarea>
           </div>
           <button type="button" class="btn btn-primary btn-block" id="fsNext">Continuar <i class="fas fa-arrow-right"><svg width="0.875em" height="1em" aria-hidden="true" focusable="false"><use href="#i-arrow-right"/></svg></i></button>
         </div>
@@ -1375,9 +1377,13 @@ section.partners{content-visibility:visible}
               <input type="text" id="cf-name" name="Nombre" placeholder="Nombre completo" autocomplete="name" required>
             </div>
             <div class="form-row">
-              <label for="cf-email">Correo electrónico</label>
-              <input type="email" id="cf-email" name="email" placeholder="su-correo@ejemplo.com" autocomplete="email" required>
+              <label for="cf-phone">Celular / WhatsApp <span class="opt" id="cfPhoneOpt">(opcional)</span></label>
+              <input type="tel" id="cf-phone" name="Celular" placeholder="9XX XXX XXX" autocomplete="tel" inputmode="tel" pattern="[+]?[0-9 ()-]{9,18}">
             </div>
+          </div>
+          <div class="form-row">
+            <label for="cf-email">Correo electrónico</label>
+            <input type="email" id="cf-email" name="email" placeholder="su-correo@ejemplo.com" autocomplete="email" required>
           </div>
           <button type="submit" class="btn btn-primary btn-block" id="cfSubmit"><i class="fas fa-paper-plane"><svg width="1.0em" height="1em" aria-hidden="true" focusable="false"><use href="#i-paper-plane"/></svg></i> Enviar solicitud</button>
           <button type="button" class="fs-back" id="fsBack"><i class="fas fa-arrow-left" aria-hidden="true"><svg width="0.875em" height="1em" aria-hidden="true" focusable="false"><use href="#i-arrow-left"/></svg></i> Volver al paso anterior</button>
@@ -1953,6 +1959,10 @@ function goStep(n,back){
     fsSummary.append('Está solicitando: ');
     const b=document.createElement('strong');b.textContent=cfReason.value;
     fsSummary.append(b,' · '+(urg?urg.value:'Consulta normal'));
+    /* si el pozo está detenido, el celular es obligatorio: hay que poder llamar de inmediato */
+    const esUrgente=!!urg&&urg.value.indexOf('URGENTE')>-1;
+    document.getElementById('cf-phone').required=esUrgente;
+    document.getElementById('cfPhoneOpt').textContent=esUrgente?'(obligatorio si es urgente)':'(opcional)';
   }
 }
 document.getElementById('fsNext').addEventListener('click',()=>{
@@ -1963,7 +1973,7 @@ document.getElementById('fsNext').addEventListener('click',()=>{
 document.getElementById('fsBack').addEventListener('click',()=>goStep(1,true));
 
 /* validación en vivo de nombre y correo */
-[['cf-name','Ingrese su nombre.'],['cf-email','Ingrese un correo válido (ej. nombre@dominio.com).']].forEach(par=>{
+[['cf-name','Ingrese su nombre.'],['cf-phone','Ingrese un celular válido (ej. 987 654 321).'],['cf-email','Ingrese un correo válido (ej. nombre@dominio.com).']].forEach(par=>{
   const el=document.getElementById(par[0]);
   const fila=el.closest('.form-row');
   const err=document.createElement('p');
@@ -1989,7 +1999,11 @@ contactForm.addEventListener('submit',e=>{
   const fd=new FormData(contactForm);
   /* asunto con prioridad: lo urgente se distingue en la bandeja sin abrir el correo */
   const urgente=(fd.get('Urgencia')||'').indexOf('URGENTE')>-1;
-  fd.set('_subject',(urgente?'🔴 URGENTE · ':'Solicitud web · ')+(fd.get('Nombre')||'Cliente')+' — '+(fd.get('Servicio solicitado')||'Consulta'));
+  fd.set('_subject',(urgente?'🔴 URGENTE · ':'Solicitud web · ')+(fd.get('Nombre')||'Cliente')+' — '+(fd.get('Servicio')||'Consulta'));
+  /* enlace directo a WhatsApp: un toque desde el correo para escribirle al cliente */
+  let tel=(fd.get('Celular')||'').replace(/\D/g,'');
+  if(tel.length===9&&tel[0]==='9')tel='51'+tel;
+  if(tel.length>=9)fd.set('WhatsApp','https://wa.me/'+tel);
   fetch('https://formsubmit.co/ajax/1475f99a6eae50d62cf48cd2f7f05d03',{
     method:'POST',
     headers:{'Accept':'application/json'},
