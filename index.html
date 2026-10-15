@@ -916,6 +916,14 @@ section.partners{content-visibility:visible}
 .splash-on .hero *{animation-play-state:paused!important}
 @media(max-width:640px){.splash-in{flex-direction:column;gap:20px;text-align:center}.splash-txt{align-items:center}.splash-bar{width:100%}}
 
+
+/* ── Título del hero: dos frases cortas; la segunda (la acción) en ámbar ── */
+.hero h1{font-weight:800;letter-spacing:-.028em;line-height:1.06;max-width:none;font-size:clamp(2.5rem,6.2vw,4.9rem)}
+.hero h1 .line-accent{color:var(--amber)}
+.hero h1 .line-accent>span{padding-bottom:.06em}
+@media(max-height:860px){.hero h1{font-size:clamp(2.2rem,4.8vw,3.6rem)}}
+@media(max-width:640px){.hero h1{font-size:clamp(2rem,9.4vw,2.6rem);line-height:1.08}}
+
 /* ── Menos movimiento: todo lo de esta capa se queda quieto ── */
 @media(prefers-reduced-motion:reduce){
   .section-title .w>span{transform:none!important}
@@ -992,13 +1000,12 @@ section.partners{content-visibility:visible}
 <div class="hero-grid-lines" aria-hidden="true"></div>
 <a href="#servicios" class="scroll-cue" aria-label="Bajar a la siguiente sección"><span class="sc-line"></span><span class="sc-txt mono">Descender</span></a>
 <div class="container">
-  <div class="hero-badge"><span class="rec-dot"></span> Perforación e inspección<span class="badge-long"> de pozos</span> · Perú</div>
+  <div class="hero-badge"><span class="rec-dot"></span> Hidrogeología<span class="badge-long"> e ingeniería de pozos</span> · Perú</div>
   <h1>
-    <span class="line"><span>Inspección técnica</span></span>
-    <span class="line"><span>y <span class="aqua">perforación</span> de</span></span>
-    <span class="line"><span><span class="highlight">pozos de agua</span></span></span>
+    <span class="line"><span>Encontramos el agua.</span></span>
+    <span class="line line-accent"><span>Perforamos su pozo.</span></span>
   </h1>
-  <p class="hero-lead">Vemos dentro de su pozo, medimos cuánta agua da y le decimos qué hacer: <strong>rehabilitar, equipar o perforar uno nuevo</strong>.</p>
+  <p class="hero-lead">Y lo inspeccionamos con cámara para que siga produciendo. <strong>Estudios, perforación, pruebas de bombeo y rehabilitación</strong> de pozos de agua en todo el Perú.</p>
   <div class="hero-buttons">
     <a href="#contacto" class="btn btn-primary"><i class="fas fa-clipboard-check"><svg width="0.75em" height="1em" aria-hidden="true" focusable="false"><use href="#i-clipboard-check"/></svg></i> Solicitar inspección</a>
     <a href="#servicios" class="btn btn-secondary"><i class="fas fa-layer-group"><svg width="1.125em" height="1em" aria-hidden="true" focusable="false"><use href="#i-layer-group"/></svg></i> Ver servicios</a>
