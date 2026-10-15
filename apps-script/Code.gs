@@ -16,12 +16,15 @@ const CFG = {
   TELEFONO: '+51 903 522 281',
   WEB: 'https://diegosotelo-png.github.io/disopa-website/',
   HOJA: 'Solicitudes',
+  // ID de la Google Sheet (lo que va entre /d/ y /edit en su URL). Vacío = la hoja donde está pegado el script.
+  HOJA_ID: '',
   AMBAR: '#F5A623',
   // freno anti-abuso: máximo de solicitudes por hora (la cuota gratis de Gmail es ~100 correos/día)
   MAX_POR_HORA: 30
 };
 
-const CAMPOS = ['Servicio', 'Urgencia', 'Ubicación', 'Detalle', 'Nombre', 'Celular', 'email'];
+// nombres sin tildes: Apps Script no lee bien los parámetros con caracteres acentuados
+const CAMPOS = ['Servicio', 'Urgencia', 'Ubicacion', 'Detalle', 'Nombre', 'Celular', 'email'];
 const LARGO_MAX = { Detalle: 2000, otro: 200 };
 const ESTADOS = ['Nuevo', 'Llamado', 'Cotizado', 'Cerrado', 'Descartado'];
 
@@ -59,7 +62,7 @@ function guardar_(d, urgente, wa) {
     const hoja = hoja_();
     hoja.appendRow([
       new Date(), urgente ? 'URGENTE' : 'Normal', d.Nombre, d.Celular, d.email,
-      d.Servicio, d['Ubicación'], d.Detalle, wa, 'Nuevo'
+      d.Servicio, d.Ubicacion, d.Detalle, wa, 'Nuevo'
     ].map(celda_));
     const fila = hoja.getLastRow();
     if (urgente) hoja.getRange(fila, 1, 1, 10).setBackground('#FDECEA');
@@ -68,8 +71,12 @@ function guardar_(d, urgente, wa) {
   }
 }
 
+function libro_() {
+  return CFG.HOJA_ID ? SpreadsheetApp.openById(CFG.HOJA_ID) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
 function hoja_() {
-  const libro = SpreadsheetApp.getActiveSpreadsheet();
+  const libro = libro_();
   let hoja = libro.getSheetByName(CFG.HOJA);
   if (hoja) return hoja;
   hoja = libro.insertSheet(CFG.HOJA);
@@ -86,7 +93,7 @@ function hoja_() {
 /* ---------- correos ---------- */
 
 function avisarDisopa_(d, urgente, wa) {
-  const zona = d['Ubicación'];
+  const zona = d.Ubicacion;
   const asunto = (urgente ? '🔴 URGENTE · ' : 'Solicitud web · ') + (zona ? zona + ' · ' : '') + d.Nombre + ' — ' + d.Servicio;
   const filas = [
     ['Servicio', d.Servicio], ['Urgencia', d.Urgencia], ['Ubicación', zona], ['Detalle', d.Detalle],
@@ -109,7 +116,7 @@ function avisarDisopa_(d, urgente, wa) {
     '<table style="width:100%;border-collapse:collapse;font-size:15px">' + filas + '</table>' +
     '<p style="margin:22px 0 8px">' + botones + '</p>' +
     '<p style="margin:18px 0 0;font-size:13px;color:#888">Todas las solicitudes: <a href="' +
-      esc_(SpreadsheetApp.getActiveSpreadsheet().getUrl()) + '">hoja de solicitudes</a></p>'
+      esc_(libro_().getUrl()) + '">hoja de solicitudes</a></p>'
   );
 
   MailApp.sendEmail({
@@ -122,7 +129,7 @@ function confirmarCliente_(d) {
     '<h2 style="margin:0 0 14px;font-size:20px">Hola ' + esc_(d.Nombre.split(' ')[0]) + ', recibimos su solicitud</h2>' +
     '<p style="margin:0 0 14px;line-height:1.6">Gracias por escribir a DISOPA. Un especialista revisará su caso y lo contactará en <strong>menos de 24 horas hábiles</strong>.</p>' +
     '<p style="margin:0 0 14px;padding:12px 14px;background:#FFF6E5;border-left:4px solid ' + CFG.AMBAR + '">' +
-      'Servicio solicitado: <strong>' + esc_(d.Servicio) + '</strong>' + (d['Ubicación'] ? '<br>Ubicación: ' + esc_(d['Ubicación']) : '') + '</p>' +
+      'Servicio solicitado: <strong>' + esc_(d.Servicio) + '</strong>' + (d.Ubicacion ? '<br>Ubicación: ' + esc_(d.Ubicacion) : '') + '</p>' +
     '<p style="margin:0 0 18px;line-height:1.6">Si su pozo está detenido o el caso es urgente, no espere: escríbanos o llámenos al <strong>' + CFG.TELEFONO + '</strong>.</p>' +
     '<p style="margin:0">' + boton_('Escribir por WhatsApp', 'https://wa.me/' + CFG.WHATSAPP, '#25D366') + '</p>' +
     '<p style="margin:24px 0 0;line-height:1.6">Atentamente,<br><strong>Equipo DISOPA</strong><br>Hidrogeología · Pozos</p>'
@@ -190,7 +197,7 @@ function superaLimite_(clave, max, segundos) {
 function probar() {
   hoja_();
   avisarDisopa_({
-    Servicio: 'Video-inspección CCTV', Urgencia: 'URGENTE — pozo detenido', 'Ubicación': 'Ate, Lima',
+    Servicio: 'Video-inspección CCTV', Urgencia: 'URGENTE — pozo detenido', Ubicacion: 'Ate, Lima',
     Detalle: 'Prueba de instalación del formulario.', Nombre: 'Prueba DISOPA', Celular: '903 522 281', email: CFG.DESTINO
   }, true, enlaceWhatsApp_('903522281'));
 }

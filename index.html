@@ -1371,7 +1371,7 @@ section.partners{content-visibility:visible}
           </a>
           <div class="form-row">
             <label for="cf-zone">Ubicación del pozo</label>
-            <input type="text" id="cf-zone" name="Ubicación" placeholder="Distrito y región" autocomplete="address-level2">
+            <input type="text" id="cf-zone" name="Ubicacion" placeholder="Distrito y región" autocomplete="address-level2">
           </div>
           <div class="form-row">
             <label for="cf-message">Detalle (opcional)</label>
@@ -1943,7 +1943,7 @@ if(!reduce&&window.matchMedia('(hover:hover)').matches){
 /* ===== FORMULARIO EN DOS PASOS → CORREO =====
    FORM_ENDPOINT: URL de la aplicación web de Apps Script (apps-script/LEEME.md).
    Vacío = se sigue usando FormSubmit. */
-const FORM_ENDPOINT='';
+const FORM_ENDPOINT='https://script.google.com/macros/s/AKfycbzculSmB7n91ygAkwrALBnJQ7WFe2rbkPthaiV6Bg2IioVu0BYfgCang_3lCQ8Im2As0g/exec';
 const FORMSUBMIT_URL='https://formsubmit.co/ajax/1475f99a6eae50d62cf48cd2f7f05d03';
 const contactForm=document.getElementById('contactForm');
 const formStatus=document.getElementById('formStatus');
@@ -2031,7 +2031,7 @@ contactForm.addEventListener('submit',e=>{
   const fd=new FormData(contactForm);
   /* asunto con prioridad: lo urgente se distingue en la bandeja sin abrir el correo */
   const urgente=(fd.get('Urgencia')||'').indexOf('URGENTE')>-1;
-  const zona=(fd.get('Ubicación')||'').trim();
+  const zona=(fd.get('Ubicacion')||'').trim();
   fd.set('_subject',(urgente?'🔴 URGENTE · ':'Solicitud web · ')+(zona?zona+' · ':'')+(fd.get('Nombre')||'Cliente')+' — '+(fd.get('Servicio')||'Consulta'));
   /* enlace directo a WhatsApp: un toque desde el correo para escribirle al cliente */
   let tel=(fd.get('Celular')||'').replace(/\D/g,'');

@@ -2,6 +2,13 @@
 
 Reemplaza a FormSubmit. Los correos llegan en español, firmados como «Web DISOPA», sin publicidad, y cada solicitud queda guardada en una Google Sheet.
 
+## Estado actual (instalado el 2026-10-15)
+
+- Hoja: «Solicitudes web DISOPA» en Drive de disopa.pe@gmail.com (pestaña «Solicitudes»).
+- Script: proyecto independiente «Formulario web DISOPA» en script.google.com (cuenta DISOPA). Como «Extensiones → Apps Script» fallaba con varias cuentas abiertas en Chrome, el script se creó aparte y abre la hoja por su ID (`HOJA_ID`; el ID real solo está en la copia de Google, en el repo queda vacío).
+- La URL `/exec` está en `FORM_ENDPOINT` de `index.html`.
+- Los nombres de campo van sin tildes (`Ubicacion`) porque Apps Script no lee bien parámetros acentuados.
+
 ## Instalación (una sola vez, unos 5 minutos)
 
 Hazlo con la sesión iniciada en **disopa.pe@gmail.com**.
