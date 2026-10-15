@@ -713,12 +713,181 @@ section{padding:110px 0;position:relative}
   .to-top{display:none}
   .section-title{max-width:none}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOVIMIENTO EXTRA — capa de vida sobre el sistema anterior.
+   Agua que sube, luz que sigue al cursor, titulares palabra a palabra.
+   Todo se apaga con prefers-reduced-motion (bloque final).
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Reveal con desenfoque: entra enfocándose, no solo deslizando ── */
+[data-reveal]{filter:blur(7px);transition:opacity .9s var(--ease-soft),transform .9s var(--ease-soft),filter .9s var(--ease-soft);transition-delay:var(--d,0s)}
+[data-reveal].visible{filter:none}
+[data-reveal="clip"]{filter:none}
+/* las tarjetas con hover propio recuperan sus transiciones tras entrar */
+.service-card[data-reveal].visible,.why-card[data-reveal].visible,.gallery-item[data-reveal].visible,.about-feature[data-reveal].visible,.spec[data-reveal].visible,.faq-item[data-reveal].visible{transition-delay:0s}
+.service-card.visible{transition:background .35s var(--ease-out),opacity .9s var(--ease-soft),transform .9s var(--ease-soft),filter .9s var(--ease-soft)}
+.gallery-item.visible{transition:outline-color .35s,transform .45s var(--ease-out),opacity .9s var(--ease-soft),filter .9s var(--ease-soft)}
+.about-feature.visible{transition:transform .35s var(--ease-out),background .35s,border-color .35s,opacity .9s var(--ease-soft),filter .9s var(--ease-soft)}
+
+/* ── Titulares de sección: cada palabra sube desde su propia ranura ── */
+.section-title .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.section-title .w>span{display:inline-block;transform:translateY(110%) rotate(4deg);transform-origin:0 100%;transition:transform .9s var(--ease-soft);transition-delay:calc(.15s + var(--wi,0) * .045s)}
+.visible .section-title .w>span{transform:none}
+
+/* ── Hero: imagen que respira (Ken Burns lento) ── */
+.hero-bg img{animation:kenBurns 26s ease-in-out infinite alternate}
+@keyframes kenBurns{from{transform:scale(1.06) translate3d(0,0,0)}to{transform:scale(1.16) translate3d(-1.5%,-1%,0)}}
+
+/* ── Hero: partículas de agua y chispas (canvas) ── */
+.hero-fx{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:0;animation:fxIn 2s ease 1.2s forwards}
+@keyframes fxIn{to{opacity:1}}
+
+/* ── Hero: foco de luz que sigue al cursor ── */
+.hero-glow{position:absolute;left:0;top:0;width:620px;height:620px;margin:-310px 0 0 -310px;z-index:1;pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,166,35,.16),rgba(79,179,201,.06) 40%,transparent 68%);
+  transform:translate3d(60vw,40vh,0);opacity:0;transition:opacity .8s;mix-blend-mode:screen}
+.hero:hover .hero-glow{opacity:1}
+
+/* ── Hero: la línea de la grilla se desliza como un escáner ── */
+.hero-grid-lines{animation:gridDrift 18s linear infinite}
+@keyframes gridDrift{to{background-position:0 88px,88px 0}}
+.hero-grid-lines::after{content:'';position:absolute;left:0;right:0;top:0;height:140px;
+  background:linear-gradient(180deg,transparent,rgba(79,179,201,.07) 45%,rgba(245,166,35,.12) 50%,transparent);
+  animation:scan 7s cubic-bezier(.45,0,.55,1) 1.6s infinite;opacity:0}
+@keyframes scan{0%{transform:translateY(-140px);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(100vh);opacity:0}}
+
+/* ── Hero: subrayado del titular con destello que lo recorre ── */
+.hero h1 .highlight,.hero h1 .aqua{position:relative}
+.hero h1 .highlight::after{content:'';position:absolute;left:0;bottom:4%;height:.06em;width:28%;
+  background:linear-gradient(90deg,transparent,#fff,transparent);opacity:0;animation:glint 4.5s var(--ease-soft) 2.2s infinite}
+@keyframes glint{0%{transform:translateX(-30%);opacity:0}12%{opacity:.9}40%{transform:translateX(330%);opacity:0}100%{transform:translateX(330%);opacity:0}}
+
+/* ── Hero: indicador de descenso ── */
+.scroll-cue{position:absolute;right:34px;bottom:96px;z-index:3;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--ink-4);opacity:0;animation:fadeUp 1s var(--ease-soft) 1.4s forwards;transition:color .3s}
+.scroll-cue:hover{color:var(--ink-1)}
+.sc-line{position:relative;width:1px;height:64px;background:var(--border-strong);overflow:hidden}
+.sc-line::after{content:'';position:absolute;left:0;top:0;width:100%;height:40%;background:linear-gradient(transparent,var(--amber));animation:drop 1.9s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes drop{from{transform:translateY(-100%)}to{transform:translateY(260%)}}
+.sc-txt{font-size:.56rem;letter-spacing:2.4px;text-transform:uppercase;writing-mode:vertical-rl}
+@media(max-width:968px),(max-height:700px){.scroll-cue{display:none}}
+
+/* ── Hero: insignia con barrido de luz ── */
+.hero-badge{position:relative;overflow:hidden}
+.hero-badge::after{content:'';position:absolute;top:0;bottom:0;width:40%;left:-50%;background:linear-gradient(100deg,transparent,rgba(245,166,35,.18),transparent);animation:badgeSweep 5s ease-in-out 1.8s infinite}
+@keyframes badgeSweep{0%{left:-50%}30%,100%{left:120%}}
+
+/* ── Cifras del hero: aparecen una a una con rebote ── */
+.stat-item{opacity:0;transform:translateY(16px);animation:statIn .8s var(--ease-soft) forwards}
+.stat-item:nth-child(1){animation-delay:.9s}.stat-item:nth-child(2){animation-delay:1s}.stat-item:nth-child(3){animation-delay:1.1s}.stat-item:nth-child(4){animation-delay:1.2s}
+@keyframes statIn{to{opacity:1;transform:none}}
+.stat-number.done{animation:numPop .5s var(--ease-out)}
+@keyframes numPop{40%{transform:scale(1.08);color:var(--amber-light)}}
+
+/* ── Brillo que sigue al cursor en toda la página ── */
+.cursor-glow{position:fixed;left:0;top:0;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(245,166,35,.075),transparent 62%);opacity:0;transition:opacity .6s;will-change:transform}
+.cursor-glow.on{opacity:1}
+@media(hover:none){.cursor-glow{display:none}}
+
+/* ── Auroras de fondo: luz de agua que deriva lentamente ── */
+.why-choose,.contact,.process,.services{overflow:hidden;isolation:isolate}
+.why-choose>.container,.contact>.container,.process>.container,.services>.container{position:relative;z-index:1}
+.why-choose::before,.contact::before,.process::before,.services::before{content:'';position:absolute;z-index:0;pointer-events:none;width:760px;height:760px;border-radius:50%;filter:blur(40px);opacity:.9}
+.why-choose::before{left:-220px;top:10%;background:radial-gradient(circle,rgba(245,166,35,.10),transparent 65%);animation:aurora 22s ease-in-out infinite alternate}
+.why-choose::after{content:'';position:absolute;z-index:0;pointer-events:none;width:640px;height:640px;border-radius:50%;right:-200px;bottom:-10%;filter:blur(40px);background:radial-gradient(circle,rgba(79,179,201,.09),transparent 65%);animation:aurora 26s ease-in-out infinite alternate-reverse}
+.contact::before{right:-260px;top:-120px;background:radial-gradient(circle,rgba(79,179,201,.08),transparent 65%);animation:aurora 24s ease-in-out infinite alternate}
+.process::before{left:50%;top:-300px;margin-left:-380px;background:radial-gradient(circle,rgba(245,166,35,.07),transparent 65%);animation:aurora 20s ease-in-out infinite alternate}
+.services::before{right:-300px;top:20%;background:radial-gradient(circle,rgba(245,166,35,.06),transparent 65%);animation:aurora 28s ease-in-out infinite alternate}
+@keyframes aurora{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(120px,-60px,0) scale(1.15)}100%{transform:translate3d(-60px,80px,0) scale(.92)}}
+
+/* ── Botones magnéticos + CTA que respira ── */
+.magnetic{transition:transform .35s var(--ease-out),box-shadow .25s var(--ease-out),background .25s,border-color .25s,color .25s}
+.magnetic.is-pulled{transition:transform .12s linear,box-shadow .25s,background .25s,border-color .25s,color .25s}
+.nav-cta{position:relative}
+.nav-cta::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(245,166,35,.55);animation:ctaPing 3.2s ease-out 2.5s infinite;pointer-events:none}
+@keyframes ctaPing{0%{box-shadow:0 0 0 0 rgba(245,166,35,.5)}45%,100%{box-shadow:0 0 0 12px rgba(245,166,35,0)}}
+
+/* ── Nosotros: insignia de experiencia flotando ── */
+.experience-badge{animation:floatY 5s ease-in-out infinite}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.about-quote{position:relative;overflow:hidden}
+.about-quote::before{content:'';position:absolute;left:-2px;top:0;width:2px;height:40%;background:linear-gradient(transparent,var(--amber-light),transparent);animation:quoteRun 3.6s ease-in-out infinite}
+@keyframes quoteRun{from{transform:translateY(-100%)}to{transform:translateY(260%)}}
+.about-feature i{transition:transform .45s var(--ease-out)}
+.about-feature:hover i{transform:scale(1.25) rotate(-10deg)}
+
+/* ── Servicios: icono que flota y borde que se enciende ── */
+.service-card:hover .service-icon i{animation:iconBob .9s var(--ease-out)}
+@keyframes iconBob{30%{transform:translateY(-4px) scale(1.15)}60%{transform:translateY(1px)}}
+
+/* ── Proceso: los puntos se encienden en secuencia y una gota recorre la línea ── */
+.process-track.visible .process-step .process-dot{animation:dotLit 1s var(--ease-out) backwards;animation-delay:calc(.3s + var(--si,0) * .32s)}
+@keyframes dotLit{0%{transform:scale(.6);opacity:0}55%{transform:scale(1.15);opacity:1;background:var(--amber);color:var(--depth);box-shadow:0 0 0 8px rgba(245,166,35,.18)}100%{transform:none}}
+.process-dot::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(245,166,35,.45);opacity:0}
+.process-track.visible .process-dot::after{animation:ring 3.2s ease-out infinite;animation-delay:calc(1.8s + var(--si,0) * .64s)}
+@keyframes ring{0%{transform:scale(.85);opacity:.9}60%,100%{transform:scale(1.5);opacity:0}}
+.process-flow{position:absolute;top:22px;left:6%;width:9px;height:9px;border-radius:50%;background:var(--amber-light);box-shadow:0 0 12px 3px rgba(245,166,35,.7);z-index:2;opacity:0;pointer-events:none}
+.process-track.visible .process-flow{animation:flow 5s cubic-bezier(.45,0,.55,1) 2s infinite}
+@keyframes flow{0%{left:6%;opacity:0}8%{opacity:1}92%{opacity:1}100%{left:94%;opacity:0}}
+@media(max-width:1080px){.process-flow{display:none}}
+
+/* ── Ficha técnica: icono que late y valor que se enciende ── */
+.spec .k i{transition:transform .45s var(--ease-out)}
+.spec:hover .k i{transform:scale(1.3) rotate(-12deg)}
+.spec .v{transition:color .35s}
+.spec:hover .v{color:var(--amber-light)}
+.spec{position:relative;overflow:hidden}
+.spec::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;background:linear-gradient(90deg,var(--amber),var(--water));transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease-out)}
+.spec:hover::after{transform:scaleX(1)}
+
+/* ── Galería: destello diagonal al pasar el cursor ── */
+.gallery-item .shine{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.16) 48%,transparent 62%);transform:translateX(-120%);transition:transform .9s var(--ease-out)}
+.gallery-item:hover .shine{transform:translateX(120%)}
+
+/* ── Por qué: borde de luz giratorio ── */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+.why-card::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;z-index:-1;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0 62%,rgba(245,166,35,.9) 78%,rgba(79,179,201,.8) 88%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  opacity:0;transition:opacity .4s;animation:angSpin 3.5s linear infinite}
+.why-card:hover::after{opacity:1}
+@keyframes angSpin{to{--ang:360deg}}
+.why-icon i{display:inline-block}
+.why-card.visible .why-icon i{animation:iconDrop .8s var(--ease-out) backwards;animation-delay:calc(var(--d,0s) + .35s)}
+@keyframes iconDrop{from{transform:translateY(-14px) scale(.6);opacity:0}}
+
+/* ── Testimonios: comillas que flotan ── */
+.testimonial-card .quote-icon{animation:floatY 6s ease-in-out infinite;display:inline-block;align-self:flex-start}
+
+/* ── Contacto: icono que se mueve al pasar ── */
+.contact-item i{transition:transform .45s var(--ease-out),color .3s}
+.contact-item:hover i{transform:scale(1.2) rotate(-8deg);color:var(--amber-light)}
+
+/* ── Ola de agua sobre el pie ── */
+.footer-wave{position:relative;height:70px;background:var(--depth);overflow:hidden;line-height:0;margin-top:-1px}
+.footer-wave svg{position:absolute;left:0;bottom:-1px;width:200%;height:100%}
+.footer-wave .fw-back{fill:rgba(79,179,201,.10);animation:waveX 16s linear infinite}
+.footer-wave .fw-front{fill:var(--depth-2);animation:waveX 10s linear infinite reverse}
+@keyframes waveX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── Menos movimiento: todo lo de esta capa se queda quieto ── */
+@media(prefers-reduced-motion:reduce){
+  [data-reveal]{filter:none!important}
+  .section-title .w>span{transform:none!important}
+  .hero-fx,.hero-glow,.cursor-glow,.process-flow,.scroll-cue .sc-line::after,.hero-grid-lines::after,.hero-badge::after,.hero h1 .highlight::after,.why-card::after{display:none!important}
+  .stat-item{opacity:1!important;transform:none!important}
+  .hero-bg img,.hero-grid-lines,.why-choose::before,.why-choose::after,.contact::before,.process::before,.services::before,.experience-badge,.testimonial-card .quote-icon,.nav-cta::after,.footer-wave path,.about-quote::before{animation:none!important}
+  .magnetic{transform:none!important}
+}
 </style>
 </head>
 <body>
 
 <a href="#inicio" class="skip-link">Saltar al contenido principal</a>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
 <div class="intro" aria-hidden="true"><span class="intro-mark"><i class="fas fa-water"></i></span></div>
 
@@ -759,6 +928,9 @@ section{padding:110px 0;position:relative}
 <section class="hero" id="inicio">
 <div class="hero-bg" id="heroBg"><img src="images/hero.webp" alt="Trabajos de perforación e inspección de pozos de agua" fetchpriority="high" decoding="async"></div>
 <div class="hero-grid-lines" aria-hidden="true"></div>
+<canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
+<div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
+<a href="#nosotros" class="scroll-cue" aria-label="Bajar a la siguiente sección"><span class="sc-line"></span><span class="sc-txt mono">Descender</span></a>
 <div class="container">
   <div class="hero-badge"><span class="rec-dot"></span> Perforación e inspección<span class="badge-long"> de pozos</span> · Perú</div>
   <h1>
@@ -1205,6 +1377,11 @@ section{padding:110px 0;position:relative}
 </div>
 </section>
 
+<!-- Ola de agua que separa el contacto del pie -->
+<div class="footer-wave" aria-hidden="true">
+  <svg viewBox="0 0 2880 80" preserveAspectRatio="none"><path class="fw-back" d="M0 40 C120 10 240 10 360 40 S600 70 720 40 960 10 1080 40 1320 70 1440 40 V80 H0Z M1440 40 C1560 10 1680 10 1800 40 S2040 70 2160 40 2400 10 2520 40 2760 70 2880 40 V80 H1440Z"/><path class="fw-front" d="M0 50 C160 25 320 25 480 50 S800 75 960 50 1280 25 1440 50 V80 H0Z M1440 50 C1600 25 1760 25 1920 50 S2240 75 2400 50 2720 25 2880 50 V80 H1440Z"/></svg>
+</div>
+
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
 <div class="footer-main">
@@ -1583,6 +1760,7 @@ if('IntersectionObserver' in window){
         const eased=1-Math.pow(1-p,3);
         el.textContent=Math.round(target*eased)+(p===1?suffix:'');
         if(p<1)requestAnimationFrame(step);
+        else el.classList.add('done');
       }
       requestAnimationFrame(step);
       counterObs.unobserve(el);
@@ -1842,6 +2020,173 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     history.replaceState(null,'',href);
   });
 });
+
+/* ===== MOVIMIENTO EXTRA ===== */
+const finePointer=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+/* Titulares: cada palabra en su ranura, conservando <em> y .aqua */
+document.querySelectorAll('.section-title').forEach(title=>{
+  let wi=0;
+  const walk=node=>{
+    Array.from(node.childNodes).forEach(n=>{
+      if(n.nodeType===3){
+        const frag=document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(part=>{
+          if(!part)return;
+          if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(part));return}
+          const w=document.createElement('span');w.className='w';
+          const inner=document.createElement('span');inner.textContent=part;
+          inner.style.setProperty('--wi',wi++);
+          w.appendChild(inner);frag.appendChild(w);
+        });
+        n.replaceWith(frag);
+      }else if(n.nodeType===1){walk(n)}
+    });
+  };
+  title.setAttribute('aria-label',title.textContent.trim());
+  walk(title);
+  title.querySelectorAll('.w').forEach(w=>w.setAttribute('aria-hidden','true'));
+});
+
+/* Ficha técnica: la cifra inicial de cada valor cuenta desde cero */
+if('IntersectionObserver' in window&&!reduce){
+  const specObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      specObs.unobserve(e.target);
+      const node=e.target.firstChild;
+      const m=node&&node.nodeType===3&&node.textContent.match(/^(\d+)(.*)$/s);
+      if(!m)return;
+      const target=Number(m[1]),rest=m[2],dur=1400;let start=0;
+      const step=now=>{
+        const p=Math.min((now-start)/dur,1);
+        node.textContent=Math.round(target*(1-Math.pow(1-p,3)))+rest;
+        if(p<1)requestAnimationFrame(step);
+      };
+      node.textContent='0'+rest;
+      setTimeout(()=>{start=performance.now();requestAnimationFrame(step)},250);
+    });
+  },{threshold:0.6});
+  document.querySelectorAll('.spec .v').forEach(v=>specObs.observe(v));
+}
+
+/* Proceso: índice de cada paso y gota que recorre la línea */
+const procTrack=document.getElementById('processTrack');
+if(procTrack){
+  procTrack.querySelectorAll('.process-step').forEach((s,i)=>s.style.setProperty('--si',i));
+  const flow=document.createElement('span');flow.className='process-flow';flow.setAttribute('aria-hidden','true');
+  procTrack.appendChild(flow);
+}
+
+/* Galería: destello diagonal */
+document.querySelectorAll('.gallery-item').forEach(it=>{
+  const s=document.createElement('span');s.className='shine';s.setAttribute('aria-hidden','true');
+  it.appendChild(s);
+});
+
+/* Hero: partículas de agua (burbujas) y chispas ámbar que ascienden */
+const fx=document.getElementById('heroFx');
+const hero=document.querySelector('.hero');
+if(fx&&hero&&!reduce&&fx.getContext){
+  const ctx=fx.getContext('2d');
+  let W=0,H=0,dpr=1,parts=[],running=false,raf=0;
+  const mouse={x:-9999,y:-9999};
+  const rand=(a,b)=>a+Math.random()*(b-a);
+  function spawn(p,initial){
+    const bubble=Math.random()<0.55;
+    p.bubble=bubble;
+    p.x=rand(0,W);
+    p.y=initial?rand(0,H):H+rand(10,60);
+    p.r=bubble?rand(1.5,4.6):rand(.8,2.2);
+    p.vy=bubble?rand(.18,.55):rand(.35,.95);
+    p.vx=0;
+    p.phase=rand(0,Math.PI*2);
+    p.amp=rand(.15,.6);
+    p.a=bubble?rand(.4,.8):rand(.5,1);
+    return p;
+  }
+  function resize(){
+    const r=hero.getBoundingClientRect();
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=r.width;H=r.height;
+    fx.width=W*dpr;fx.height=H*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.round(Math.min(120,Math.max(36,W*H/11000)));
+    parts=Array.from({length:n},()=>spawn({},true));
+  }
+  function frame(t){
+    ctx.clearRect(0,0,W,H);
+    for(const p of parts){
+      p.phase+=0.012;
+      const dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
+      if(d2<14400){const f=(1-d2/14400)*0.9;p.vx+=dx/Math.sqrt(d2+1)*f}
+      p.vx*=0.94;
+      p.x+=Math.sin(p.phase)*p.amp+p.vx;
+      p.y-=p.vy;
+      const fade=Math.min(1,p.y/(H*0.35));
+      if(p.y<-20||p.x<-20||p.x>W+20){spawn(p,false);continue}
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      if(p.bubble){
+        ctx.strokeStyle='rgba(143,216,232,'+(p.a*fade)+')';
+        ctx.lineWidth=1;ctx.stroke();
+      }else{
+        ctx.fillStyle='rgba(255,209,112,'+(p.a*fade)+')';
+        ctx.shadowColor='rgba(245,166,35,.8)';ctx.shadowBlur=8;
+        ctx.fill();ctx.shadowBlur=0;
+      }
+    }
+    if(running)raf=requestAnimationFrame(frame);
+  }
+  function setRun(on){
+    if(on===running)return;
+    running=on;
+    if(on)raf=requestAnimationFrame(frame);else cancelAnimationFrame(raf);
+  }
+  resize();
+  let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
+  new IntersectionObserver(es=>es.forEach(e=>setRun(e.isIntersecting&&!document.hidden))).observe(hero);
+  document.addEventListener('visibilitychange',()=>setRun(!document.hidden&&window.scrollY<H));
+
+  const glow=document.getElementById('heroGlow');
+  hero.addEventListener('pointermove',e=>{
+    const r=hero.getBoundingClientRect();
+    mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;
+    if(glow&&finePointer)glow.style.transform='translate3d('+mouse.x+'px,'+mouse.y+'px,0)';
+  },{passive:true});
+  hero.addEventListener('pointerleave',()=>{mouse.x=mouse.y=-9999});
+}
+
+/* Brillo que sigue al cursor por toda la página, con inercia */
+const cGlow=document.getElementById('cursorGlow');
+if(cGlow&&finePointer&&!reduce){
+  let tx=0,ty=0,cx=0,cy=0,loop=0;
+  const tick=()=>{
+    cx+=(tx-cx)*0.12;cy+=(ty-cy)*0.12;
+    cGlow.style.transform='translate3d('+cx+'px,'+cy+'px,0)';
+    loop=(Math.abs(tx-cx)+Math.abs(ty-cy)>0.5)?requestAnimationFrame(tick):0;
+  };
+  document.addEventListener('pointermove',e=>{
+    tx=e.clientX;ty=e.clientY;
+    if(!cGlow.classList.contains('on')){cx=tx;cy=ty;cGlow.classList.add('on')}
+    if(!loop)loop=requestAnimationFrame(tick);
+  },{passive:true});
+  document.addEventListener('pointerleave',()=>cGlow.classList.remove('on'));
+}
+
+/* Botones magnéticos: se dejan atraer por el cursor */
+if(finePointer&&!reduce){
+  document.querySelectorAll('.hero-buttons .btn,.nav-cta,.carousel-nav button,.lightbox-nav button').forEach(b=>{
+    b.classList.add('magnetic');
+    b.addEventListener('pointermove',e=>{
+      const r=b.getBoundingClientRect();
+      const x=(e.clientX-r.left-r.width/2)*0.28,y=(e.clientY-r.top-r.height/2)*0.38;
+      b.classList.add('is-pulled');
+      b.style.transform='translate3d('+x+'px,'+y+'px,0)';
+    });
+    b.addEventListener('pointerleave',()=>{b.classList.remove('is-pulled');b.style.transform=''});
+  });
+}
 
 /* ===== AÑO EN EL PIE ===== */
 document.getElementById('year').textContent=new Date().getFullYear();
